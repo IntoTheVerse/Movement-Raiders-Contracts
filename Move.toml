@@ -5,11 +5,11 @@ license = "MIT"
 authors = []
 
 [addresses]
-resource_publisher = "0xa85ebfda0f61c63a85c6b103d32f2251d1736a7ce36f680f040fb493e0fb604f"
-publisher = "0x87fa1b3182916ea244596c11cb030a0f0d0088aeb3a3a80cd429017162476ae0" #unity
+resource_publisher = "0xa40f392c12d1e02e56703b143f6f74a826e4ff0a5c0585ab739096c883e9fe7e"
+publisher = "0xdc494026c03645c91f7ad28a5119c34d4001329c15e98e446485a4cef48bb9ff" #unity
 
 [dev-addresses]
-publisher = "0x87fa1b3182916ea244596c11cb030a0f0d0088aeb3a3a80cd429017162476ae0"
+publisher = "0xdc494026c03645c91f7ad28a5119c34d4001329c15e98e446485a4cef48bb9ff"
 
 [dependencies.AptosFramework]
 git = "https://github.com/aptos-labs/aptos-core.git"
