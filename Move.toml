@@ -1,0 +1,24 @@
+[package]
+name = "Cyptara_Conquest_Movement"
+version = "1.0.0"
+license = "MIT"
+authors = []
+
+[addresses]
+resource_publisher = "0xa85ebfda0f61c63a85c6b103d32f2251d1736a7ce36f680f040fb493e0fb604f"
+publisher = "0x87fa1b3182916ea244596c11cb030a0f0d0088aeb3a3a80cd429017162476ae0" #unity
+
+[dev-addresses]
+publisher = "0x87fa1b3182916ea244596c11cb030a0f0d0088aeb3a3a80cd429017162476ae0"
+
+[dependencies.AptosFramework]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "devnet"
+subdir = "aptos-move/framework/aptos-framework"
+
+[dependencies.AptosTokenObjects]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "devnet"
+subdir = "aptos-move/framework/aptos-token-objects"
+
+[dev-dependencies]
