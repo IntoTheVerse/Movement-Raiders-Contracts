@@ -6,7 +6,6 @@ module publisher::cryptara_conquest_token
     use std::string::utf8;
     use std::option;
 
-    const EINVALID_MINT: u64 = 1;
     const ASSET_SYMBOL: vector<u8> = b"CRYCQ";
 
     #[resource_group_member(group = aptos_framework::object::ObjectGroup)]
@@ -26,8 +25,8 @@ module publisher::cryptara_conquest_token
             utf8(b"Cryptara Conquest Token"),
             utf8(ASSET_SYMBOL),
             0,
-            utf8(b"https://bafkreia3ju7pg4a2wi2ieeempnrhfvwzokt6avbs5kcmliuzbpifg2zqa4.ipfs.dweb.link/"),
-            utf8(b"https://github.com/IntoTheVerse/Aptos-Hackathon-Game")
+            utf8(b"https://akrd.net/ThxREHiybgJnOu4WCXg1HXCucBLdFo7xLmhiU8YSdAg"),
+            utf8(b"https://linktr.ee/intotheverse")
         );
 
         let mint_ref = fungible_asset::generate_mint_ref(constructor_ref);
@@ -38,26 +37,6 @@ module publisher::cryptara_conquest_token
             &metadata_object_signer,
             ManagedFungibleAsset { mint_ref, transfer_ref, burn_ref }
         )
-    }
-
-    #[view]
-    public fun get_metadata(): Object<Metadata> 
-    {
-        let asset_address = object::create_object_address(&@publisher, ASSET_SYMBOL);
-        object::address_to_object<Metadata>(asset_address)
-    }
-
-    #[view]
-    public fun get_balance<T: key>(account: address, metadata: Object<T>): u64 
-    {
-        if (fungible_asset::store_exists(primary_store_address(account, metadata))) 
-        {
-            fungible_asset::balance(primary_store(account, metadata))
-        } 
-        else 
-        {
-            0
-        }
     }
 
     fun primary_store_address<T: key>(owner: address, metadata: Object<T>): address 
@@ -72,13 +51,27 @@ module publisher::cryptara_conquest_token
         object::address_to_object<FungibleStore>(store)
     }
 
-    public entry fun get_tokens(to: address, amount: u64, chest_opened: u64) acquires ManagedFungibleAsset
+    fun get_metadata(): Object<Metadata> 
     {
-        assert!(amount == chest_opened * 4, EINVALID_MINT);
-        mint(to, amount);
+        let asset_address = object::create_object_address(&@publisher, ASSET_SYMBOL);
+        object::address_to_object<Metadata>(asset_address)
     }
 
-    fun mint(to: address, amount: u64) acquires ManagedFungibleAsset 
+    #[view]
+    public fun get_balance(account: address): u64 
+    {
+        let metadata = get_metadata();
+        if (fungible_asset::store_exists(primary_store_address(account, metadata))) 
+        {
+            fungible_asset::balance(primary_store(account, metadata))
+        } 
+        else 
+        {
+            0
+        }
+    }
+
+    public entry fun get_tokens(to: address, amount: u64) acquires ManagedFungibleAsset
     {
         let asset = get_metadata();
         let managed_fungible_asset = borrow_global<ManagedFungibleAsset>(object::object_address(&asset));
@@ -87,7 +80,7 @@ module publisher::cryptara_conquest_token
         fungible_asset::deposit_with_ref(&managed_fungible_asset.transfer_ref, to_wallet, fa);
     }
 
-    public entry fun burn(from: address, amount: u8) acquires ManagedFungibleAsset 
+    public fun burn(from: address, amount: u8) acquires ManagedFungibleAsset 
     {
         let asset = get_metadata();
         let burn_ref = &borrow_global<ManagedFungibleAsset>(object::object_address(&asset)).burn_ref;

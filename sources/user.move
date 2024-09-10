@@ -35,8 +35,8 @@ module publisher::cryptara_conquest_player
             username
         });
 
-        // cryptara_conquest_characters::mint_character(&account, 0);
-        // cryptara_conquest_weapons::mint_weapon(&account, 0);
+        cryptara_conquest_characters::mint_character(&account, 0);
+        cryptara_conquest_weapons::mint_weapon(&account, 0);
     }
 
     public entry fun change_username(account: signer, username: String) acquires User

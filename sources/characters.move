@@ -1,160 +1,279 @@
 module publisher::cryptara_conquest_characters
 {
-    use aptos_token_objects::token;
-    use aptos_framework::object;
-    use std::option::{Self, Option};
+    use std::string;
     use std::vector;
-    use std::string::{Self, String};
-    use aptos_std::smart_table::{Self, SmartTable};
-    use aptos_token_objects::collection;
-    use aptos_std::string_utils;
-    use publisher::cryptara_conquest_token;
     use std::signer;
+    use aptos_token::token;
+    use std::string::String;
+    use aptos_token::token::TokenDataId;
+    use publisher::cryptara_conquest_token;
     use publisher::cryptara_conquest_publisher_signer;
 
-    const ECOLLECTION_ALREADY_INITIALIZED: u64 = 0;
-
-    struct Collection has key 
+    struct ModuleData has key
     {
-        soulbound: bool,
-        mintable: bool,
-        one_to_one_mapping: Option<SmartTable<address, address>>
+        character_data_ids: vector<TokenDataId>
     }
 
-    #[resource_group_member(group = aptos_framework::object::ObjectGroup)]
-    struct Characters has key
+    struct Prices has key
     {
-        characters: vector<Character>
-    }
-
-    struct Character has store, copy, drop, key
-    {
-        name: String,
-        description: String,
-        movingSpeed: u8,
-        rollSpeed: u8,
-        rollDistance: u8,
-        maxHealth: u8,
-        price: u8,
-        uri: String
+        prices: vector<u8>
     }
 
     fun init_module(admin: &signer) 
     {
-        let characters: vector<Character> = 
-        vector<Character>[
-            Character
-            {
-                name: string::utf8(b"Rad Wraith"),
-                description: string::utf8(b"Rad Wraith, a post-apocalyptic survivor with a cowboy hat, masters the shotgun for brutal close-quarters combat."),
-                movingSpeed: 8,
-                rollSpeed: 9,
-                rollDistance: 8,
-                maxHealth: 100,
-                price: 0,
-                uri: string::utf8(b"https://bafkreiaw7lfkdfrxbd2e27r2p4bykuk7zyegss767mmzfkonqaz7bhmp5q.ipfs.dweb.link/"),
+        let prices = vector<u8>[0, 8, 15, 18, 22, 25];
+        move_to(admin, Prices { prices });
 
-            },
-            Character
-            {
-                name: string::utf8(b"Neuro Shock"),
-                description: string::utf8(b"Neuro Shock, a genius marine scientist armed with cutting-edge tech, battles enemies with a blend of intellect and firepower."),
-                movingSpeed: 9,
-                rollSpeed: 10,
-                rollDistance: 7,
-                maxHealth: 110,
-                price: 8,
-                uri: string::utf8(b"https://bafkreieuzwuigcmhpqz3a2soo7qvmhzpcchzjo7hqqxlq2tzipu36gneuu.ipfs.dweb.link/"),
-            },
-            Character
-            {
-                name: string::utf8(b"Shade Striker"),
-                description: string::utf8(b"Shade Striker, a stealthy bandit clad in worn black gear and tech-enhanced gear, wields a glowing revolver with deadly precision."),
-                movingSpeed: 12,
-                rollSpeed: 11,
-                rollDistance: 8,
-                maxHealth: 105,
-                price: 15,
-                uri: string::utf8(b"https://bafkreiepfp3l3o2w5ndnpnvudzqz5kmo3kyet4s3rn5ycwae2lsts6ff44.ipfs.dweb.link/"),
-            },
-            Character
-            {
-                name: string::utf8(b"Tech Shot"),
-                description: string::utf8(b"Tech Shot, a master of customized firearms and gadgets, blends his tech savvy engineering skills with firepower to conquer enemies."),
-                movingSpeed: 13,
-                rollSpeed: 10,
-                rollDistance: 7,
-                maxHealth: 115,
-                price: 18,
-                uri: string::utf8(b"https://bafkreiepfp3l3o2w5ndnpnvudzqz5kmo3kyet4s3rn5ycwae2lsts6ff44.ipfs.dweb.link/"),
-            },
-            Character
-            {
-                name: string::utf8(b"Cog Sniper"),
-                description: string::utf8(b"Cog Sniper, a master marksman with a steampunk rifle, uses clockwork gadgets for precise and deadly combat."),
-                movingSpeed: 8,
-                rollSpeed: 10,
-                rollDistance: 8,
-                maxHealth: 120,
-                price: 22,
-                uri: string::utf8(b"https://bafkreiepfp3l3o2w5ndnpnvudzqz5kmo3kyet4s3rn5ycwae2lsts6ff44.ipfs.dweb.link/"),
-            },
-            Character
-            {
-                name: string::utf8(b"Mecha Shade"),
-                description: string::utf8(b"Mecha Shade, a lethal mercenary with cybernetic enhancements, wields advanced weaponry to dominate in obliterate bosses and enemies."),
-                movingSpeed: 7,
-                rollSpeed: 10,
-                rollDistance: 9,
-                maxHealth: 125,
-                price: 25,
-                uri: string::utf8(b"https://bafkreiepfp3l3o2w5ndnpnvudzqz5kmo3kyet4s3rn5ycwae2lsts6ff44.ipfs.dweb.link/"),
-            }
-        ];
-
-        move_to(admin, Characters { characters });
-
-        let constructor_ref = collection::create_unlimited_collection(
-            &cryptara_conquest_publisher_signer::get_signer(),
-            string::utf8(b"The brave dungeon raiders."),
+        token::create_collection(
+            admin,
             string::utf8(b"CC Characters"),
-            option::none(),
-            string::utf8(b"https://linktr.ee/intotheverse")
+            string::utf8(b"The brave dungeon raiders."),
+            string::utf8(b"https://akrd.net/LniukunI-rP_qa_rn7SD4hIa6XB29Db6AjssvH5LFJE"),
+            0,
+            vector<bool>[false, false, false]
         );
 
-        move_to(&object::generate_signer(&constructor_ref), Collection {
-            soulbound: false,
-            mintable: true,
-            one_to_one_mapping: option::some(smart_table::new())
+        let character_data_ids: vector<TokenDataId> = 
+        vector<TokenDataId>
+        [
+            token::create_tokendata(
+                admin,
+                string::utf8(b"CC Characters"),
+                string::utf8(b"Rad Wraith"),
+                string::utf8(b"Rad Wraith, a post-apocalyptic survivor with a cowboy hat, masters the shotgun for brutal close-quarters combat."),
+                0,
+                string::utf8(b"https://akrd.net/NiqFHcPSRLvY0Opv2TNGQE_M-K8HOVjPCwSyblXbfu8"),
+                signer::address_of(admin),
+                1,
+                0,
+                token::create_token_mutability_config(&vector<bool>[false, false, false, false, true]),
+                vector<String>
+                [
+                    string::utf8(b"Move Speed"), 
+                    string::utf8(b"Roll Speed"),
+                    string::utf8(b"Roll Distance"),
+                    string::utf8(b"Max Health"),
+                    string::utf8(b"Price"),
+                ],
+                vector<vector<u8>>
+                [
+                    b"8", 
+                    b"9",
+                    b"8",
+                    b"100",
+                    b"0",
+                ],
+                vector<String>
+                [
+                    string::utf8(b"u64"), 
+                    string::utf8(b"u64"),
+                    string::utf8(b"u64"),
+                    string::utf8(b"u64"),
+                    string::utf8(b"u64"),
+                ],
+            ),
+            token::create_tokendata(
+                admin,
+                string::utf8(b"CC Characters"),
+                string::utf8(b"Neuro Shock"),
+                string::utf8(b"Neuro Shock, a genius marine scientist armed with cutting-edge tech, battles enemies with a blend of intellect and firepower."),
+                0,
+                string::utf8(b"https://akrd.net/TmFPmCk6neG_H6OfXZkaxMwaeeUcVrG1S7L17Z2kJ7c"),
+                signer::address_of(admin),
+                1,
+                0,
+                token::create_token_mutability_config(&vector<bool>[false, false, false, false, true]),
+                vector<String>
+                [
+                    string::utf8(b"Move Speed"), 
+                    string::utf8(b"Roll Speed"),
+                    string::utf8(b"Roll Distance"),
+                    string::utf8(b"Max Health"),
+                    string::utf8(b"Price"),
+                ],
+                vector<vector<u8>>
+                [
+                    b"9", 
+                    b"10",
+                    b"7",
+                    b"110",
+                    b"8",
+                ],
+                vector<String>
+                [
+                    string::utf8(b"u64"), 
+                    string::utf8(b"u64"),
+                    string::utf8(b"u64"),
+                    string::utf8(b"u64"),
+                    string::utf8(b"u64"),
+                ],
+            ),
+            token::create_tokendata(
+                admin,
+                string::utf8(b"CC Characters"),
+                string::utf8(b"Shade Striker"),
+                string::utf8(b"Shade Striker, a stealthy bandit clad in worn black gear and tech-enhanced gear, wields a glowing revolver with deadly precision."),
+                0,
+                string::utf8(b"https://akrd.net/8BB8UvQ8mOfiQX5WnD1nu8rO-lZfzQXOT11FLShm7uw"),
+                signer::address_of(admin),
+                1,
+                0,
+                token::create_token_mutability_config(&vector<bool>[false, false, false, false, true]),
+                vector<String>
+                [
+                    string::utf8(b"Move Speed"), 
+                    string::utf8(b"Roll Speed"),
+                    string::utf8(b"Roll Distance"),
+                    string::utf8(b"Max Health"),
+                    string::utf8(b"Price"),
+                ],
+                vector<vector<u8>>
+                [
+                    b"12", 
+                    b"11",
+                    b"8",
+                    b"105",
+                    b"15",
+                ],
+                vector<String>
+                [
+                    string::utf8(b"u64"), 
+                    string::utf8(b"u64"),
+                    string::utf8(b"u64"),
+                    string::utf8(b"u64"),
+                    string::utf8(b"u64"),
+                ],
+            ),
+            token::create_tokendata(
+                admin,
+                string::utf8(b"CC Characters"),
+                string::utf8(b"Tech Shot"),
+                string::utf8(b"Tech Shot, a master of customized firearms and gadgets, blends his tech savvy engineering skills with firepower to conquer enemies."),
+                0,
+                string::utf8(b"https://akrd.net/cn_T2NJAjfxnIZlFrLRNl6lookaQy32h8x5SV9LDSps"),
+                signer::address_of(admin),
+                1,
+                0,
+                token::create_token_mutability_config(&vector<bool>[false, false, false, false, true]),
+                vector<String>
+                [
+                    string::utf8(b"Move Speed"), 
+                    string::utf8(b"Roll Speed"),
+                    string::utf8(b"Roll Distance"),
+                    string::utf8(b"Max Health"),
+                    string::utf8(b"Price"),
+                ],
+                vector<vector<u8>>
+                [
+                    b"13", 
+                    b"10",
+                    b"7",
+                    b"115",
+                    b"18",
+                ],
+                vector<String>
+                [
+                    string::utf8(b"u64"), 
+                    string::utf8(b"u64"),
+                    string::utf8(b"u64"),
+                    string::utf8(b"u64"),
+                    string::utf8(b"u64"),
+                ],
+            ),
+            token::create_tokendata(
+                admin,
+                string::utf8(b"CC Characters"),
+                string::utf8(b"Cog Sniper"),
+                string::utf8(b"Cog Sniper, a master marksman with a steampunk rifle, uses clockwork gadgets for precise and deadly combat."),
+                0,
+                string::utf8(b"https://akrd.net/iyZx568pPsYeRROecWFlTE1jOHWgz3keZp1Ms9EcM-s"),
+                signer::address_of(admin),
+                1,
+                0,
+                token::create_token_mutability_config(&vector<bool>[false, false, false, false, true]),
+                vector<String>
+                [
+                    string::utf8(b"Move Speed"), 
+                    string::utf8(b"Roll Speed"),
+                    string::utf8(b"Roll Distance"),
+                    string::utf8(b"Max Health"),
+                    string::utf8(b"Price"),
+                ],
+                vector<vector<u8>>
+                [
+                    b"8", 
+                    b"10",
+                    b"8",
+                    b"120",
+                    b"22",
+                ],
+                vector<String>
+                [
+                    string::utf8(b"u64"), 
+                    string::utf8(b"u64"),
+                    string::utf8(b"u64"),
+                    string::utf8(b"u64"),
+                    string::utf8(b"u64"),
+                ],
+            ),
+            token::create_tokendata(
+                admin,
+                string::utf8(b"CC Characters"),
+                string::utf8(b"Mecha Shade"),
+                string::utf8(b"Mecha Shade, a lethal mercenary with cybernetic enhancements, wields advanced weaponry to dominate in obliterate bosses and enemies."),
+                0,
+                string::utf8(b"https://akrd.net/4vf4KxY7HwUQK0cI3A5-bk_XOq_lm-5I_9GxnZ8Bv9Q"),
+                signer::address_of(admin),
+                1,
+                0,
+                token::create_token_mutability_config(&vector<bool>[false, false, false, false, true]),
+                vector<String>
+                [
+                    string::utf8(b"Move Speed"), 
+                    string::utf8(b"Roll Speed"),
+                    string::utf8(b"Roll Distance"),
+                    string::utf8(b"Max Health"),
+                    string::utf8(b"Price"),
+                ],
+                vector<vector<u8>>
+                [
+                    b"7", 
+                    b"10",
+                    b"9",
+                    b"125",
+                    b"25",
+                ],
+                vector<String>
+                [
+                    string::utf8(b"u64"), 
+                    string::utf8(b"u64"),
+                    string::utf8(b"u64"),
+                    string::utf8(b"u64"),
+                    string::utf8(b"u64"),
+                ],
+            )
+        ];
+
+        move_to(admin, ModuleData 
+        {
+            character_data_ids
         });
     }
 
-    #[view]
-    public fun get_all_metadata(): vector<Character>  acquires Characters
+    public entry fun mint_character(receiver: &signer, type: u64) acquires ModuleData, Prices
     {
-        let characters = borrow_global<Characters>(@publisher).characters;
-        characters
-    }
+        let module_data = borrow_global_mut<ModuleData>(@publisher);
+        let resource_signer = cryptara_conquest_publisher_signer::get_signer();
 
-    public entry fun mint_character(creator: &signer, type: u64) acquires Characters
-    {
-        let characters = borrow_global<Characters>(@publisher).characters;
-        let character = vector::borrow(&characters, type);
+        let token_id = token::mint_token(&resource_signer, *vector::borrow(&module_data.character_data_ids, type), 1);
+        token::direct_transfer(&resource_signer, receiver, token_id, 1);
 
-        token::create_named_token(
-            &cryptara_conquest_publisher_signer::get_signer(),
-            string::utf8(b"Raider Characters"),
-            character.description,
-            character.name,
-            option::none(),
-            string_utils::format2(&b"{},{}", character.uri, character.price),
-        );
+        let prices = borrow_global<Prices>(@publisher).prices;
+        let price = *vector::borrow(&prices, type);
 
-        move_to(creator, *character);
-
-        if(character.price > 0)
+        if(price > 0)
         {
-            cryptara_conquest_token::burn(signer::address_of(creator), character.price);
+            cryptara_conquest_token::burn(signer::address_of(receiver), price);
         }
     }
 }
