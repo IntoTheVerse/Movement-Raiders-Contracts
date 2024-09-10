@@ -80,7 +80,7 @@ module publisher::cryptara_conquest_token
         fungible_asset::deposit_with_ref(&managed_fungible_asset.transfer_ref, to_wallet, fa);
     }
 
-    public fun burn(from: address, amount: u8) acquires ManagedFungibleAsset 
+    public entry fun burn(from: address, amount: u8) acquires ManagedFungibleAsset 
     {
         let asset = get_metadata();
         let burn_ref = &borrow_global<ManagedFungibleAsset>(object::object_address(&asset)).burn_ref;
