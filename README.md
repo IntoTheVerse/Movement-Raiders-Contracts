@@ -2,6 +2,9 @@
 
 - Smart contracts have been deployed to [Movement Testnet (Aptos Environment)](https://explorer.movementlabs.xyz/account/0xdc494026c03645c91f7ad28a5119c34d4001329c15e98e446485a4cef48bb9ff/modules/code/cryptara_conquest_characters?network=testnet) 
 
+# Web2 backend is created at: 
+- [https://github.com/IntoTheVerse/movement-realms-backend](https://github.com/IntoTheVerse/movement-realms-backend)
+
 ![image](https://github.com/user-attachments/assets/720131e7-4d73-4ec1-8631-784561be9d1d)
 
 - **Smart Contracts can be tested on the explorer (by running transactions)**
