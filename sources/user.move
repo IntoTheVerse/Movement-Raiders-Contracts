@@ -11,7 +11,8 @@ module publisher::cryptara_conquest_player
     struct User has key
     {
         /// the username of the user
-        username: String
+        username: String,
+        lastMapLevel: u8
     }
 
     // error codes
@@ -32,7 +33,8 @@ module publisher::cryptara_conquest_player
         assert_user_does_not_exist(signer::address_of(&account));
 
         move_to(&account, User {
-            username
+            username,
+            lastMapLevel: 0
         });
 
         cryptara_conquest_characters::mint_character(&account, 0);
@@ -47,16 +49,27 @@ module publisher::cryptara_conquest_player
         user.username = username;
     }
 
+    public entry fun change_last_map_level(account: signer, level: u8) acquires User
+    {
+        let account_address = signer::address_of(&account);
+        assert_user_exists(account_address);
+        let user = borrow_global_mut<User>(account_address);
+        if(level > user.lastMapLevel)
+        {
+            user.lastMapLevel = level;
+        }
+    }
+
     // view functions
 
     #[view]
     /// returns the user data for a given account address
     /// * account_address - the address of the account to get the user data for
-    public fun get_user(account_address: address): (String) acquires User
+    public fun get_user(account_address: address): (String, u8) acquires User
     {
         assert_user_exists(account_address);
         let user = borrow_global<User>(account_address);
-        (user.username)
+        (user.username, user.lastMapLevel)
     }
 
     // assert statements

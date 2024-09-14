@@ -6,19 +6,19 @@ authors = []
 
 [addresses]
 resource_publisher = "0xa85ebfda0f61c63a85c6b103d32f2251d1736a7ce36f680f040fb493e0fb604f"
-publisher = "0x2266e1291102690ed826dc6e04b7ec5954710c7ee4285cf278d81a7df8d9120f" #unity
+publisher = "0x78f2cb3059f93bc602b284fc92e036b5b0fa60a2d0dbaeac490a5b8a4dbe4e12" #unity
 
 [dev-addresses]
-publisher = "0x2266e1291102690ed826dc6e04b7ec5954710c7ee4285cf278d81a7df8d9120f"
+publisher = "0x78f2cb3059f93bc602b284fc92e036b5b0fa60a2d0dbaeac490a5b8a4dbe4e12"
 
 [dependencies.AptosFramework]
 git = "https://github.com/aptos-labs/aptos-core.git"
 rev = "devnet"
 subdir = "aptos-move/framework/aptos-framework"
 
-[dependencies.AptosToken]
+[dependencies.AptosTokenObjects]
 git = "https://github.com/aptos-labs/aptos-core.git"
 rev = "devnet"
-subdir = "aptos-move/framework/aptos-token"
+subdir = "aptos-move/framework/aptos-token-objects"
 
 [dev-dependencies]
