@@ -6,10 +6,10 @@ authors = []
 
 [addresses]
 resource_publisher = "0xa85ebfda0f61c63a85c6b103d32f2251d1736a7ce36f680f040fb493e0fb604f"
-publisher = "0x78f2cb3059f93bc602b284fc92e036b5b0fa60a2d0dbaeac490a5b8a4dbe4e12" #unity
+publisher = "0x725790d90e8f68a25caabea7da90744e8c172a9dcb2a2aa4ddf23441f414c5c5" #unity
 
 [dev-addresses]
-publisher = "0x78f2cb3059f93bc602b284fc92e036b5b0fa60a2d0dbaeac490a5b8a4dbe4e12"
+publisher = "0x725790d90e8f68a25caabea7da90744e8c172a9dcb2a2aa4ddf23441f414c5c5"
 
 [dependencies.AptosFramework]
 git = "https://github.com/aptos-labs/aptos-core.git"

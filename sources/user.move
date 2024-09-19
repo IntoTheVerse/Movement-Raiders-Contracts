@@ -12,7 +12,9 @@ module publisher::cryptara_conquest_player
     {
         /// the username of the user
         username: String,
-        lastMapLevel: u8
+        lastMapLevel: u8,
+        reloadCounter: u64,
+        heartsLostCounter: u64
     }
 
     // error codes
@@ -34,7 +36,9 @@ module publisher::cryptara_conquest_player
 
         move_to(&account, User {
             username,
-            lastMapLevel: 0
+            lastMapLevel: 0,
+            reloadCounter: 0,
+            heartsLostCounter: 0
         });
 
         cryptara_conquest_characters::mint_character(&account, 0);
@@ -58,6 +62,22 @@ module publisher::cryptara_conquest_player
         {
             user.lastMapLevel = level;
         }
+    }
+
+    public entry fun add_reload_counter(account: signer) acquires User
+    {
+        let account_address = signer::address_of(&account);
+        assert_user_exists(account_address);
+        let user = borrow_global_mut<User>(account_address);
+        user.reloadCounter = user.reloadCounter + 1;
+    }
+
+    public entry fun add_hearts_lost_counter(account: signer) acquires User
+    {
+        let account_address = signer::address_of(&account);
+        assert_user_exists(account_address);
+        let user = borrow_global_mut<User>(account_address);
+        user.heartsLostCounter = user.heartsLostCounter + 1;
     }
 
     // view functions
